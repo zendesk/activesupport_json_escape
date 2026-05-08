@@ -1,0 +1,13 @@
+*.bundle
+*.o
+*.so
+.DS_Store
+/.bundle/
+/.ruby-lsp/
+/.yardoc/
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
