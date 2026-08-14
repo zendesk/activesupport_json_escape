@@ -6,9 +6,9 @@ Gem::Specification.new do |spec|
   spec.authors = ["Benjamin Quorning"]
   spec.email = ["bquorning@zendesk.com"]
 
-  spec.summary = "Faster HTML entity and JS separator escaping for ActiveSupport JSON encoding"
+  spec.summary = "Faster ActiveSupport JSON escaping and native quoting of arbitrary bytes"
   spec.description = "Drop-in ActiveSupport::JSON encoder that replaces the Ruby gsub! calls for escaping HTML " \
-                     "entities (<, >, &) and JavaScript line/paragraph separators (U+2028, U+2029) with a C extension."
+                     "entities and JavaScript separators with a C extension, plus a byte-preserving JSON string quoter."
   spec.homepage = "https://github.com/zendesk/activesupport_json_escape"
   spec.license = "Apache License Version 2.0"
   spec.required_ruby_version = ">= 3.2"
@@ -21,6 +21,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.extensions = ["ext/activesupport_json_escape/extconf.rb"]
 
-  spec.add_dependency "json", ">= 2.15.2"
+  spec.add_dependency "json", ">= 2.21", "< 3"
   spec.add_dependency "activesupport", ">= 8.1"
 end

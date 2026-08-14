@@ -126,4 +126,32 @@ class ActiveSupportJsonEscapeTest < Minitest::Test
     assert_includes fast_result, "\\u003e"
     assert_includes fast_result, "\\u2028"  # JS separators escaped
   end
+
+  def test_compatibility_with_stock_encoder_for_each_escape_option
+    data = {
+      html: "<p>one & two</p>",
+      separators: "line\u2028paragraph\u2029",
+      nested: ["plain", {value: ">"}]
+    }
+    option_sets = [nil, {escape: false}, {escape_html_entities: false}, {escape_html_entities: true}]
+
+    option_sets.each do |options|
+      fast = ActiveSupportJsonEscape::Encoder.new(options).encode(data)
+      stock = ActiveSupport::JSON::Encoding::JSONGemEncoder.new(options).encode(data)
+      assert_equal stock, fast, "options: #{options.inspect}"
+    end
+  end
+
+  def test_compatibility_when_js_separator_escaping_is_disabled
+    encoding = ActiveSupport::JSON::Encoding
+    original = encoding.escape_js_separators_in_json
+    encoding.escape_js_separators_in_json = false
+    data = {html: "<p>&</p>", separators: "\u2028\u2029"}
+
+    fast = ActiveSupportJsonEscape::Encoder.new.encode(data)
+    stock = ActiveSupport::JSON::Encoding::JSONGemEncoder.new.encode(data)
+    assert_equal stock, fast
+  ensure
+    encoding.escape_js_separators_in_json = original unless original.nil?
+  end
 end
